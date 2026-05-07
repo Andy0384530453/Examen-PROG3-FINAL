@@ -17,7 +17,7 @@ public class ProjectDataSource {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/agricultural_federation_api");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("Andy 3003");
+        dataSource.setPassword("ntsoa");
         return dataSource;
     }
 

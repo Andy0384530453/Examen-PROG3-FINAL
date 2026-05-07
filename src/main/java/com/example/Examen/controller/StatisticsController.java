@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.*;
 public class StatisticsController {
     private final StatisticsService statisticsService;
 
-    @GetMapping("/collectivites/{id}/statistics")
+    @GetMapping("/collectivities/{id}/statistics")
     public ResponseEntity<?> getLocalStats(
             @PathVariable String id,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
@@ -38,7 +38,7 @@ public class StatisticsController {
         }
     }
 
-    @GetMapping("/collectivites/statistics")
+    @GetMapping("/collectivities/statistics")
     public ResponseEntity<?> getOverallStatistics(
             @RequestParam(required = false) String id,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,

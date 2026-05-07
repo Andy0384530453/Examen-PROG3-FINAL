@@ -1,6 +1,8 @@
 -----
 -- Mandeha par ordre le manao insertion anreo d tandremo fa misy enum amle atendance vakio tsra le spec
 
+CREATE DATABASE agricultural_federation_api;
+
 INSERT INTO collectivity (id, name, number, location, specialization, president_id, vice_president_id, treasurer_id, secretary_id) VALUES
 ('col-1', 'Mpanorina', 1, 'Ambatondrazaka', 'Riziculture', NULL, NULL, NULL, NULL),
 ('col-2', 'Dobo voalahany', 2, 'Ambatondrazaka', 'Pisciculture', NULL, NULL, NULL, NULL),
@@ -36,6 +38,10 @@ INSERT INTO member (id, first_name, last_name, birth_date, gender, address, prof
 ('C3-M7', 'Prénom15', 'Nom15', '1998-01-13', 'MALE', 'Lot UV 7 Antsirabe', 'Apiculteur', '0374914567', 'member.15@fed-agri.mg', 'SENIOR_MEMBER', TRUE, TRUE),
 ('C3-M8', 'Prénom16', 'Nom16', '1975-08-02', 'MALE', 'Lot UV 8 Antsirabe', 'Apiculteur', '0370634567', 'member.16@fed-agri.mg', 'SENIOR_MEMBER', TRUE, TRUE);
 
+UPDATE member 
+SET occupation = 'SENIOR' 
+WHERE occupation = 'SENIOR_MEMBER';
+
 
 UPDATE collectivity SET
     president_id = 'C1-M1', vice_president_id = 'C1-M2', treasurer_id = 'C1-M4', secretary_id = 'C1-M3'
@@ -48,6 +54,7 @@ WHERE id = 'col-2';
 UPDATE collectivity SET
     president_id = 'C3-M1', vice_president_id = 'C3-M2', treasurer_id = 'C3-M4', secretary_id = 'C3-M3'
 WHERE id = 'col-3';
+
 
 
 INSERT INTO collectivity_member (id, member_id, collectivity_id) VALUES
@@ -154,8 +161,6 @@ INSERT INTO member_payment (id, amount, creation_date, member_debited_id, member
 ('pay-C1-M6-v2', 100000, '2026-05-01', 'C1-M6', 'cot-1', 'CASH', 'C1-A-CASH'),
 ('pay-C1-M7-v2',  60000, '2026-05-01', 'C1-M7', 'cot-1', 'CASH', 'C1-A-CASH'),
 ('pay-C1-M8-v2',  90000, '2026-05-01', 'C1-M8', 'cot-1', 'CASH', 'C1-A-CASH'),
-
--- Collectivité 2 (Tableau 16)
 ('pay-C2-M1-v2', 120000, '2026-01-01', 'C2-M1', 'cot-3', 'CASH', 'C2-A-CASH'),
 ('pay-C2-M2-v2', 180000, '2026-01-01', 'C2-M2', 'cot-3', 'CASH', 'C2-A-CASH'),
 ('pay-C2-M3-v2', 200000, '2026-01-01', 'C2-M3', 'cot-3', 'CASH', 'C2-A-CASH'),
@@ -164,9 +169,6 @@ INSERT INTO member_payment (id, amount, creation_date, member_debited_id, member
 ('pay-C2-M6-v2', 200000, '2026-01-01', 'C2-M6', 'cot-3', 'CASH', 'C2-A-CASH'),
 ('pay-C2-M7-v2',  80000, '2026-01-01', 'C2-M7', 'cot-3', 'MOBILE_BANKING', 'C2-A-MOBILE-1'),
 ('pay-C2-M8-v2', 120000, '2026-01-01', 'C2-M8', 'cot-3', 'MOBILE_BANKING', 'C2-A-MOBILE-1'),
-
--- Collectivité 3 (Tableau 17)
--- Avril 2026
 ('pay-C3-M1-avr', 25000, '2026-04-01', 'C3-M1', 'cot-5', 'BANK_TRANSFER', 'C3-A-BANK-1'),
 ('pay-C3-M2-avr', 25000, '2026-04-01', 'C3-M2', 'cot-5', 'BANK_TRANSFER', 'C3-A-BANK-1'),
 ('pay-C3-M3-avr', 25000, '2026-04-01', 'C3-M3', 'cot-5', 'BANK_TRANSFER', 'C3-A-BANK-1'),
@@ -175,7 +177,6 @@ INSERT INTO member_payment (id, amount, creation_date, member_debited_id, member
 ('pay-C3-M6-avr', 25000, '2026-04-01', 'C3-M6', 'cot-5', 'BANK_TRANSFER', 'C3-A-BANK-2'),
 ('pay-C3-M7-avr', 25000, '2026-04-01', 'C3-M7', 'cot-5', 'CASH', 'C3-A-CASH'),
 ('pay-C3-M8-avr', 25000, '2026-04-01', 'C3-M8', 'cot-5', 'CASH', 'C3-A-CASH'),
--- Mai 2026
 ('pay-C3-M1-mai', 25000, '2026-05-01', 'C3-M1', 'cot-5', 'BANK_TRANSFER', 'C3-A-BANK-1'),
 ('pay-C3-M2-mai', 25000, '2026-05-01', 'C3-M2', 'cot-5', 'BANK_TRANSFER', 'C3-A-BANK-1'),
 ('pay-C3-M3-mai', 15000, '2026-05-01', 'C3-M3', 'cot-5', 'BANK_TRANSFER', 'C3-A-MOBILE-1'),
@@ -185,10 +186,6 @@ INSERT INTO member_payment (id, amount, creation_date, member_debited_id, member
 ('pay-C3-M7-mai',  5000, '2026-05-01', 'C3-M7', 'cot-5', 'CASH', 'C3-A-CASH'),
 ('pay-C3-M8-mai',  5000, '2026-05-01', 'C3-M8', 'cot-5', 'CASH', 'C3-A-CASH');
 
--- ============================================================
--- Nouveaux membres adhérents (Tableaux 18,19,20)
--- ============================================================
--- Collectivité 1
 INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, occupation, registration_fee_paid, membership_dues_paid) VALUES
 ('N1-M1', 'Jean', 'Rakoto', '1990-01-01', 'MALE', 'Adresse random', 'Paysan', '0311111111', 'new1@mail.com', 'JUNIOR_MEMBER', TRUE, TRUE),
 ('N1-M2', 'Marie', 'Rabe', '1992-02-02', 'FEMALE', 'Adresse random', 'Cultivatrice', '0322222222', 'new2@mail.com', 'JUNIOR_MEMBER', TRUE, TRUE),
@@ -238,7 +235,3 @@ INSERT INTO member_referee (id, member_refereed_id, member_referee_id) VALUES
 ('refn3-7', 'N3-M4', 'C3-M1'), ('refn3-8', 'N3-M4', 'C3-M2'),
 ('refn3-9', 'N3-M5', 'C3-M1'), ('refn3-10','N3-M5', 'C3-M2'),
 ('refn3-11','N3-M6', 'C3-M1'), ('refn3-12','N3-M6', 'C3-M2');
-
--- ============================================================
--- FIN
--- ============================================================

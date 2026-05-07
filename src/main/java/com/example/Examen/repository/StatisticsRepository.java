@@ -64,15 +64,20 @@ public class StatisticsRepository {
     public List<CollectivityOverallStatistics> getOverallStatistics(LocalDate from, LocalDate to) {
         List<CollectivityOverallStatistics> statsList = new ArrayList<>();
         String sql = """
-        SELECT 
-            c.id, c.name, c.number,
-            (SELECT COUNT(*) FROM collectivity_member cm WHERE cm.collectivity_id = c.id) as total_members,
-            (SELECT COUNT(DISTINCT mp.member_debited_id) 
-             FROM member_payment mp 
-             INNER JOIN collectivity_member cm ON mp.member_debited_id = cm.member_id
-             WHERE cm.collectivity_id = c.id 
-             AND mp.creation_date BETWEEN ? AND ?) as paid_count
-        FROM collectivity c
+            SELECT 
+                c.id, 
+                c.name, 
+                c.number,
+            (SELECT COUNT(cm.member_id) 
+            FROM collectivity_member cm 
+        WHERE cm.collectivity_id = c.id) as total_members,
+        (SELECT COUNT(DISTINCT mp.member_debited_id) 
+        FROM member_payment mp 
+        INNER JOIN collectivity_member cm ON mp.member_debited_id = cm.member_id
+           WHERE cm.collectivity_id = c.id 
+        AND mp.creation_date BETWEEN ? AND ?) as paid_count
+        FROM collectivity c 
+            GROUP BY c.id, c.name, c.number ORDER BY id
         """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -111,8 +116,8 @@ public class StatisticsRepository {
                 m.id, m.first_name, m.last_name, m.email, m.occupation,
                 COALESCE(SUM(p.amount), 0) as earned,
                 COALESCE(
-                    (SELECT (COUNT(*) FILTER (WHERE att.attendance_status = 'ATTENDED')::float / 
-                             NULLIF(COUNT(*), 0)) * 100
+                    (SELECT (COUNT(1) FILTER (WHERE att.attendance_status = 'ATTENDED')::float / 
+                             NULLIF(COUNT(1), 0)) * 100
                      FROM activity_member_attendance att
                      JOIN activity a ON att.activity_id = a.id
                      WHERE att.member_id = m.id 
