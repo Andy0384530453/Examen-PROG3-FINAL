@@ -157,11 +157,12 @@ public class MemberRepository {
     public List<Member> findByCollectivityId(String collectivityId) {
         List<Member> memberList = new ArrayList<>();
         String sql = """
-            select id, first_name, last_name, birth_date, gender, phone_number, 
-                   email, address, profession, occupation, registration_fee_paid, membership_dues_paid
-            from "member"
-            join collectivity_member on "member".id = collectivity_member.member_id
-            where collectivity_member.collectivity_id = ?
+          SELECT m.id, m.first_name, m.last_name, m.birth_date, m.gender, m.phone_number, 
+               m.email, m.address, m.profession, m.occupation, 
+               m.registration_fee_paid, m.membership_dues_paid
+        FROM "member" m
+        JOIN collectivity_member cm ON m.id = cm.member_id
+        WHERE cm.collectivity_id = ?
             """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, collectivityId);

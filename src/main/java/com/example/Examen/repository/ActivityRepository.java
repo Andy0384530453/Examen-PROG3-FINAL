@@ -58,7 +58,7 @@ public class ActivityRepository {
 
     public List<CollectivityActivity> findByCollectivityId(String collectivityId) {
         List<CollectivityActivity> activities = new ArrayList<>();
-        String sql = "SELECT * FROM activity WHERE collectivity_id = ?";
+        String sql = "SELECT id, collectivity_id, label, activity_type, executive_date, week_ordinal, day_of_week, concerned_occupations FROM activity WHERE collectivity_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, collectivityId);
             ResultSet rs = statement.executeQuery();
@@ -72,7 +72,7 @@ public class ActivityRepository {
     }
 
     public Optional<CollectivityActivity> findById(String activityId) {
-        String sql = "SELECT * FROM activity WHERE id = ?";
+        String sql = "SELECT id, collectivity_id, label, activity_type, executive_date, week_ordinal, day_of_week, concerned_occupations FROM activity WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, activityId);
             ResultSet rs = statement.executeQuery();

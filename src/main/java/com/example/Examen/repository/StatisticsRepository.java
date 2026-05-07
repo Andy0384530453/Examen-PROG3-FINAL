@@ -45,6 +45,7 @@ public class StatisticsRepository {
 
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
+                System.out.println("unpaid amount of" + rs.getString("last_name")  +rs.getDouble("unpaid_amount"));
                 statsList.add(new CollectivityLocalStatistics(
                         new MemberDescription(
                                 rs.getString("id"), rs.getString("first_name"),
@@ -52,12 +53,14 @@ public class StatisticsRepository {
                                 rs.getString("occupation")
                         ),
                         rs.getDouble("earned_amount"),
-                        Math.max(0, rs.getDouble("unpaid_amount"))
+                        rs.getDouble("unpaid_amount")
+                        
                 ));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(statsList);
         return statsList;
     }
 
