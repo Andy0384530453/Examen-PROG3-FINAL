@@ -32,7 +32,7 @@ public class AttendanceRepository {
     }
 
     public void saveAttendances(String activityId, List<CreateActivityMemberAttendance> list) {
-        String sql = "INSERT INTO activity_member_attendance (activity_id, member_id, attendance_status) VALUES (?, ?, ?) " +
+        String sql = "INSERT INTO activity_member_attendance (activity_id, member_id, attendance_status) VALUES (?, ?, ?::attendance_status) " +
                 "ON CONFLICT (activity_id, member_id) DO UPDATE SET attendance_status = EXCLUDED.attendance_status";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
