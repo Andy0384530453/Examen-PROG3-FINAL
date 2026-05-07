@@ -235,3 +235,71 @@ INSERT INTO member_referee (id, member_refereed_id, member_referee_id) VALUES
 ('refn3-7', 'N3-M4', 'C3-M1'), ('refn3-8', 'N3-M4', 'C3-M2'),
 ('refn3-9', 'N3-M5', 'C3-M1'), ('refn3-10','N3-M5', 'C3-M2'),
 ('refn3-11','N3-M6', 'C3-M1'), ('refn3-12','N3-M6', 'C3-M2');
+            SELECT 
+                m.id, m.first_name, m.last_name, m.email, m.occupation,
+                COALESCE(SUM(p.amount), 0) as earned_amount,
+                (
+                  SELECT COALESCE(SUM(mf.amount), 0)
+                  FROM membership_fee mf
+                  WHERE mf.collectivity_id = 'col-1'
+                  AND mf.status = 'ACTIVE'
+                  AND mf.eligible_from BETWEEN '2026-01-01' AND '2026-01-04'
+                ) - COALESCE(SUM(p.amount), 0) as unpaid_amount
+            FROM member m
+            INNER JOIN collectivity_member cm ON m.id = cm.member_id
+            LEFT JOIN member_payment p ON m.id = p.member_debited_id 
+                AND p.creation_date BETWEEN '2026-01-01' AND '2026-01-04'
+            WHERE cm.collectivity_id = 'col-1'
+            GROUP BY m.id, m.first_name, m.last_name, m.email, m.occupation;
+
+            SELECT * from collectivity;
+
+            SELECT 
+                m.id, m.first_name, m.last_name, m.email, m.occupation,
+                COALESCE(SUM(p.amount), 0) as earned,
+                COALESCE(
+                    (SELECT (COUNT(1) FILTER (WHERE att.attendance_status = 'ATTENDED')::float / 
+                             NULLIF(COUNT(1), 0)) * 100
+                     FROM activity_member_attendance att
+                     JOIN activity a ON att.activity_id = a.id
+                     WHERE att.member_id = m.id 
+                     AND a.executive_date BETWEEN '2026-01-01' AND '2026-01-04'), 0
+                ) as assiduity
+            FROM "member" m
+            LEFT JOIN member_payment p ON m.id = p.member_debited_id 
+                AND p.creation_date BETWEEN '2026-01-01' AND '2026-01-04'
+            JOIN collectivity_member cm ON m.id = cm.member_id
+            WHERE cm.collectivity_id = 'col-1'
+            GROUP BY m.id, m.first_name, m.last_name, m.email, m.occupation;
+
+                        SELECT 
+                c.id, 
+                c.name, 
+                c.number,
+            (SELECT COUNT(cm.member_id) 
+            FROM collectivity_member cm 
+        WHERE cm.collectivity_id = c.id) as total_members,
+        (SELECT COUNT(DISTINCT mp.member_debited_id) 
+        FROM member_payment mp 
+        INNER JOIN collectivity_member cm ON mp.member_debited_id = cm.member_id
+           WHERE cm.collectivity_id = c.id 
+        AND mp.creation_date BETWEEN '2026-01-01' AND '2026-05-07') as paid_count
+        FROM collectivity c 
+            GROUP BY c.id, c.name, c.number ORDER BY id
+
+            SELECT concerned_occupations from activity;
+            UPDATE nom_table 
+SET colonne1 = 'nouvelle_valeur1', colonne2 = 'nouvelle_valeur2'
+WHERE condition;
+
+SELECT * from activity ORDER BY id;
+UPDATE activity 
+SET activity_type = 
+    CASE 
+        WHEN activity_type IN ('CONFERENCE', 'WORKSHOP', 'EVENT', 'DISTRIBUTION') THEN 'OTHER'::activity_type
+        WHEN activity_type = 'MEETING' THEN 'MEETING'::activity_type
+        WHEN activity_type = 'TRAINING' THEN 'TRAINING'::activity_type
+        ELSE 'OTHER'::activity_type
+    END
+WHERE activity_type NOT IN ('MEETING', 'TRAINING', 'OTHER');
+            UPDATE SET 

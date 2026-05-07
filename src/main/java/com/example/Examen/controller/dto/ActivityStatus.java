@@ -4,7 +4,5 @@ public enum ActivityStatus {
     ACTIVE,
     INACTIVE;
 
-    public static class MemberController {
 
-    }
 }
